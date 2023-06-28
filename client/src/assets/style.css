@@ -1,0 +1,24 @@
+body {
+  color: #333;
+  height: 100vh;
+}
+
+h1 {
+  font-family: 'Oswald', sans-serif;
+  color: rgb(144, 140, 135);
+  position: center;
+  
+}
+h2{
+  color: rgb(144, 140, 135);
+}
+label{
+  color: rgb(144, 140, 135);
+
+}
+
+#page {
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
