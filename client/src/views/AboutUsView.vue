@@ -1,37 +1,57 @@
 <template>
     <div>
-      <h1>About Us</h1>
-      <section>
-        <h2 style="color:aliceblue">What We Do</h2>
-        <p style="background-color:rgb(158, 152, 152)" v-html="description"></p>
+      <section>   
+        <div class="box">
+          <h2 style="font-family: 'NombreDeLaFuente', sans-serif; color: aliceblue;">¿Que hacemos?</h2>
+          <p style="font-family: 'NombreDeLaFuente', sans-serif; color: aliceblue;" v-html="description"></p>
+        </div>
+
       </section>
       <section>
-        <h2 style="color:aliceblue">Offices</h2>
-        <p style="color:aliceblue"> We are almost in every European city as
-            from NetInventory we offer the best solutions for all the companies.     </p>
-        <p style="color:aliceblue"> Make it Easier - Make it faster </p>
+        <div class="box">
+        <h2 style="color:aliceblue">Oficinas</h2>
+        <p style="color:aliceblue"> Tenemos nuestra Sede en Barcelona pero queremos ayudar a cantidad de paises     </p>
+        </div>
         <div id="map"></div>
       </section>
     </div>
+    <button ref="contactButton" @click="showPopup = true" class="contact-button">Contact us</button>
+  <transition name="popup">
+    <div v-if="showPopup" class="popup-overlay">
+      <div class="popup-container" :style="popupStyle">
+        <button @click="showPopup = false" class="close-button">X</button>
+        <table class="contact-table">
+          <thead>
+            <tr style="color: white">
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="color: white">
+              <td>John Doe</td>
+              <td>john.doe@example.com</td>
+              <td>123-456-7890</td>
+            </tr>
+            <tr style="color: white">
+              <td>Jane Smith</td>
+              <td>jane.smith@example.com</td>
+              <td>987-654-3210</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </transition>
   </template>
   
   <script setup lang="ts">
   import { ref, onMounted } from 'vue';
   import { Loader } from "@googlemaps/js-api-loader"
 
-  const description = ref(`At NetInventory, we specialize in providing comprehensive solutions for efficiently managing your company's inventory and other business needs. Our platform is designed to meet the demands of even the most challenging business environments, offering powerful tools and an intuitive interface that will streamline your daily operations and enable data-driven strategic decision-making.<br><br>
-
-    What do we offer? <br><br>
-
-    Customization and scalability: We understand that every business is unique, which is why our platform is designed to adapt to your specific needs. You can customize workflows, data fields, and reports to align with your business requirements. Moreover, our platform is highly scalable, allowing it to grow alongside your business without disruptions or limitations.<br><br>
-
-    Collaboration and effective communication: We facilitate collaboration and communication across different teams and departments within your company. Our platform enables real-time information sharing, automatic notifications, task assignments, and a clear record of all inventory-related interactions. This improves operational efficiency and helps prevent errors and misunderstandings.<br><br>
-
-    Analysis and reporting: We provide powerful analytics and reporting tools that offer deep insights into your inventory operations. Gain key insights into stock levels, demand trends, costs, and other important indicators to make informed and strategic decisions.<br><br>
-
-    Integrations and compatibility: Our platform seamlessly integrates with other business systems and software such as accounting systems, ERPs, and CRMs. This allows for smooth data synchronization and process optimization across all areas of your business.<br><br>
-
-    At NetInventory, we are committed to your success and strive to be your trusted partner in inventory management and other business needs. With our platform, you can save time, reduce costs, improve efficiency, and make smarter decisions. Let us help you unlock your full business potential!`);
+  const description = ref(`En SkateGrowth somos una empresa que nuestro principal objetivo es ayudar a la comunidad Skater a crecer y a mejorar su experiencia en el mundo del Skate. Por eso con nuestra plataforma
+  queremos ayudar a los Skaters y los que no tienen la oportunidad de serlo, facilitando descuentos a los skaters que ayudan a los mas necesitados y a los que no tienen la oportunidad de serlo. `);
 
   declare const google: any;
 
@@ -43,6 +63,10 @@
 });
 
 let map: any;
+const showPopup = ref(false);
+const contactButton = ref<HTMLElement | null>(null);
+const popupStyle = ref({});
+
 
 loader.load().then(() => {
   map = new google.maps.Map(document.getElementById("map") as HTMLElement, {
@@ -52,6 +76,15 @@ loader.load().then(() => {
 });
 
 onMounted(() => {
+  if (contactButton.value) {
+    const buttonRect = contactButton.value.getBoundingClientRect();
+    popupStyle.value = {
+      bottom: `${window.innerHeight - buttonRect.top}px`,
+      left: `${buttonRect.left}px`,
+      transform: 'translate(-100%, 0)',
+      maxWidth: `${buttonRect.width}px`
+    };
+  }
   loader.load().then(() => {
     initMap();
   });
@@ -96,16 +129,126 @@ function initMap() {
   </script>
   
   <style>
+  .contact-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-container {
+    background-color: transparent;
+    border-radius: 4px;
+    position: fixed;
+    max-width: 90vw;
+    z-index: 9999; /* Para que este encima de todo*/
+  }
+  
+  .close-button {
+    position: absolute;
+    top: -1rem;
+    right: -24.5em;
+    padding: 5px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .contact-table {
+    margin-top: 20px;
+    margin-left: 10rem;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .contact-table th,
+  .contact-table td {
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .contact-table th {
+    background-color: #4caf4fa6;
+    color: white;
+  }
+  
+  .contact-table td {
+    border-bottom: 1px solid black;
+    background-color: rgba(255, 255, 255, 0.592);
+  }
+  
+  .popup-enter-active {
+    animation: popup-enter 0.3s ease-out;
+  }
+  
+  .popup-leave-active {
+    animation: popup-leave 0.3s ease-in;
+  }
+  
+  @keyframes popup-enter {
+    0% {
+      opacity: 0;
+      transform: translate(-100%, 10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-100%, 0);
+    }
+  }
+  
+  @keyframes popup-leave {
+    0% {
+      opacity: 1;
+      transform: translate(-100%, 0);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-100%, 10px);
+    }
+  }
+  .box {
+    background-color: rgba(42, 59, 72, 0.8);
+    padding: 2rem;
+    margin-top: 1rem;
+    border-radius: 5rem;
+  }
+
   #map {
     height: 50rem;
     width: 80%;
+    margin-top: 1rem;
     margin-left: auto;
     margin-right: auto;
 }
 
   #description{
-
     color: white-space;
   }
+ 
   </style>
   

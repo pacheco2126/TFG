@@ -6,14 +6,25 @@ import NavBar from './components/NavBar.vue';
 <template>
   <div id="app">
     <NavBar />
-    <RouterView/>
+    <RouterView/> 
+    <footer class="footer">
+      © NetInentory 2023
+    </footer> 
   </div>
+
 </template>
 <style>
 body{
   background: url('./images/background.png');
   background-position: center center;
   background-size: cover;
-  background-attachment: fixed; /* Fija el fondo de pantalla */
+  background-attachment: fixed; 
 }
+.footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0,9rem;
+  background-color: #f0f0f066;
+} 
 </style>

@@ -1,9 +1,38 @@
 <template>
+  <button ref="contactButton" @click="showPopup = true" class="contact-button">Contact us</button>
+    <transition name="popup">
+      <div v-if="showPopup" class="popup-overlay">
+        <div class="popup-container" :style="popupStyle">
+          <button @click="showPopup = false" class="close-button">X</button>
+          <table class="contact-table">
+            <thead>
+              <tr style="color: white">
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="color: white">
+                <td>John Doe</td>
+                <td>john.doe@example.com</td>
+                <td>123-456-7890</td>
+              </tr>
+              <tr style="color: white">
+                <td>Jane Smith</td>
+                <td>jane.smith@example.com</td>
+                <td>987-654-3210</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </transition>
   <div id="item">
     <h1>Items here</h1>
     <div class="container">
-      <RouterLink to="/register_item" class="btn btn-primary" style="position: relative;">Register Item</RouterLink>  
-      <input type="text" v-model="searchTerm" placeholder="Search items..." >
+      <RouterLink to="/register_item" class="btn btn-primary" style="position: relative;">Register Item</RouterLink>
+      <input type="text" v-model="searchTerm" placeholder="Search items...">
       <Suspense>
         <template #default>
           <div v-if="!isLoading" v-for="item in filteredItems" :key="item.id_item" class="card card-body mt-4" style="background-color: rgba(255, 255, 255, 0.554);">
@@ -11,9 +40,9 @@
             <h6 class="card-subtitle mb-2" style="color:rgb(71, 62, 73)">Item Name: {{ item.item_name }}</h6>
             <h6 class="card-subtitle mb-2" style="color:rgb(71, 62, 73)">Assigned to: {{ item.Assigned_to }}</h6>
             <router-link :to="`/edit_item/${item.id_item}`" class="btn btn-primary">Edit Items</router-link>
-            <button @click="deleteItem(item)" class="btn btn-danger">Delete Item</button> 
+            <button @click="deleteItem(item)" class="btn btn-danger">Delete Item</button>
           </div>
-        </template> 
+        </template>
 
         <template #fallback>
           <p>Loading...</p>
@@ -25,40 +54,47 @@
 
 <script setup lang="ts">
 import { useAuthStore, type ItemData } from '../stores/auth';
-import { computed, onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const authStore = useAuthStore();
 
 const isLoading = ref(true);
-let searchTerm = ref('');
-let originalItems = computed(() => authStore.items);
-console.log("original items", originalItems.value)
-
-watch(searchTerm, searchItems);
-
-
-function searchItems() {
-  if (!searchTerm.value) {
-    return originalItems.value;
-  }
-  return originalItems.value.filter((item) => {
-    return item.item_name.toLowerCase().includes(searchTerm.value.toLowerCase());
-  });
-}
-
-const filteredItems = ref([]  as ItemData[]);
+const searchTerm = ref('');
+const originalItems = ref([] as ItemData[]);
+const filteredItems = ref([] as ItemData[]);
+const showPopup = ref(false);
+const contactButton = ref<HTMLElement | null>(null);
+const popupStyle = ref({});
 
 onMounted(async () => {
+  if (contactButton.value) {
+    const buttonRect = contactButton.value.getBoundingClientRect();
+    popupStyle.value = {
+      bottom: `${window.innerHeight - buttonRect.top}px`,
+      left: `${buttonRect.left}px`,
+      transform: 'translate(-100%, 0)',
+      maxWidth: `${buttonRect.width}px`
+    };
+  }
   try {
-    await authStore.getItem();  
+    await authStore.getItem();
     isLoading.value = false;
-    filteredItems.value = originalItems.value;
+    originalItems.value = authStore.items;
+    filteredItems.value = authStore.items;
   } catch (error) {
     console.error('Error getting items:', error);
   }
-
 });
 
+watch(searchTerm, (newValue) => {
+  if (!newValue) {
+    filteredItems.value = originalItems.value;
+  } else {
+    filteredItems.value = originalItems.value.filter((item) => {
+      return item.item_name.toLowerCase().includes(newValue.toLowerCase());
+    });
+  }
+});
 
 async function deleteItem(item: ItemData) {
   console.log("el item a borrar es", item.Assigned_to)
@@ -68,10 +104,7 @@ async function deleteItem(item: ItemData) {
     console.error('Error deleting item:', error);
   }
 }
-
 </script>
-
-
 
 <style>
 
@@ -123,6 +156,107 @@ async function deleteItem(item: ItemData) {
 #item .container .card .btn-danger {
   background-color: #f44336;
   border-color: #f44336;
+}
+.contact-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-container {
+  background-color: transparent;
+  border-radius: 4px;
+  position: fixed;
+  max-width: 90vw;
+}
+
+.close-button {
+  position: absolute;
+  top: -1rem;
+  right: -24.5em;
+  padding: 5px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.contact-table {
+  margin-top: 20px;
+  margin-left: 10rem;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.contact-table th,
+.contact-table td {
+  padding: 8px;
+  text-align: left;
+}
+
+.contact-table th {
+  background-color: #4caf4fa6;
+  color: white;
+}
+
+.contact-table td {
+  border-bottom: 1px solid black;
+  background-color: rgba(255, 255, 255, 0.592);
+}
+
+.popup-enter-active {
+  animation: popup-enter 0.3s ease-out;
+}
+
+.popup-leave-active {
+  animation: popup-leave 0.3s ease-in;
+}
+
+@keyframes popup-enter {
+  0% {
+    opacity: 0;
+    transform: translate(-100%, 10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-100%, 0);
+  }
+}
+
+@keyframes popup-leave {
+  0% {
+    opacity: 1;
+    transform: translate(-100%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-100%, 10px);
+  }
 }
 
 </style>

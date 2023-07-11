@@ -3,11 +3,12 @@ import { createPinia } from 'pinia'
 import { authentication } from './plugins/authentication'
 import router from './router'
 import App from './App.vue'
-
+//import i18n  from './plugins/i18n'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import "bootstrap"
 
+//app.use(i18n);
 const app = createApp(App)
 
 app.use(createPinia())

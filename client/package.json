@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.15.2",
+    "@intlify/unplugin-vue-i18n": "^0.11.0",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "pinia": "^2.0.36",
     "vue": "^3.3.2",
+    "vue-i18n": "^9.2.2",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {

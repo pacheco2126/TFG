@@ -1,9 +1,5 @@
 <template>
-  <main>
-    <div class="box">
-    <h1 style="color: aliceblue;">Bienvenido a SkateGrowth</h1>
-    </div>
-    <button ref="contactButton" @click="showPopup = true" class="contact-button">Contact us</button>
+  <button ref="contactButton" @click="showPopup = true" class="contact-button">Contactanos</button>
     <transition name="popup">
       <div v-if="showPopup" class="popup-overlay">
         <div class="popup-container" :style="popupStyle">
@@ -11,9 +7,9 @@
           <table class="contact-table">
             <thead>
               <tr style="color: white">
-                <th>Name</th>
+                <th>Nombre</th>
                 <th>Email</th>
-                <th>Phone</th>
+                <th>Telefono</th>
               </tr>
             </thead>
             <tbody>
@@ -32,18 +28,22 @@
         </div>
       </div>
     </transition>
-  </main>
+  <div>
+    <div class="box">
+    <h1 style="color: aliceblue;">Nuestros Sponsors</h1>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-//import { useI18n } from 'vue-i18n';
 
-
+const articles = ref([""]);
 const showPopup = ref(false);
 const contactButton = ref<HTMLElement | null>(null);
 const popupStyle = ref({});
-//const { t } = useI18n();
+
+onMounted(fetchNews);
 
 onMounted(() => {
   if (contactButton.value) {
@@ -56,9 +56,24 @@ onMounted(() => {
     };
   }
 });
-</script>
 
+async function fetchNews() {
+  try {
+    const response = await fetch("https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=1125c5670e3a4afdb3805933240dee63");
+    const data = await response.json();
+    articles.value = data.articles;
+    articles.value = articles.value.slice(0, 5);
+} catch (error) {
+    console.log(error);
+  }
+}
+</script>
 <style>
+li img {
+  width: 80rem;
+  height: 40rem;
+  margin-top: 1rem;
+}
 .box {
   background-color: rgba(42, 59, 72, 0.8);
   padding: 2rem;

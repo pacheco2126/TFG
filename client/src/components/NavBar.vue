@@ -1,150 +1,124 @@
 <template>
-    <nav class="navbar navbar-expand-lg bg-light" >
+  <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid" style="background-color: black">
-      <router-link class="navbar-brand" :to="{name: 'home'}"> <img src="../images/logo.png" alt="Logo"> </router-link> 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#appNavbar" aria-controls="appNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <router-link class="navbar-brand" :to="{ name: 'home' }">
+        <img src="../images/logo.png" alt="Logo">
+      </router-link>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#appNavbar"
+        aria-controls="appNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="appNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link :to="{name: 'home'}" class="nav-link" aria-current="page" style="color: white;">Home</router-link>
+            <router-link :to="{ name: 'home' }" class="nav-link" aria-current="page" style="color: white;">Home</router-link>
           </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'about_us' }" class="nav-link" style="color: white;">About Us</router-link>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" role="button" @click="toggleContactUs" style="color: white;">Contact Us</a>
-          <div v-show="showContactUs" class="contact-us-dropdown">
-            <table>
-              <tr>
-                <td>Name:</td>
-                <td>John Doe</td>
-              </tr>
-              <tr>
-                <td>Phone:</td>
-                <td>+1 1234567890</td>
-              </tr>
-              <tr>
-                <td>Address:</td>
-                <td>123 Main St, City</td>
-              </tr>
-              <tr>
-                <td>Email:</td>
-                <td>contact@example.com</td>
-              </tr>
-            </table>
-          </div>
-        </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'news' }" class="nav-link" style="color: white;">News</router-link>
-        </li>
-      </ul>
+          <li class="nav-item">
+            <router-link :to="{ name: 'about_us' }" class="nav-link" style="color: white;">About Us</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link :to="{ name: 'news' }" class="nav-link" style="color: white;">Sponsors</router-link>
+          </li>
+        </ul>
         <ul class="navbar-nav mb-2 mb-lg-0">
           <li v-if="isAuthenticated" class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+              style="color: white;">
               {{ user.username }}
             </a>
-            <ul class="dropdown-menu"> 
-              <li><router-link :to="{name: 'items'}" class="dropdown-item">Items</router-link></li>
+            <ul class="dropdown-menu">
+              <li><router-link :to="{ name: 'items' }" class="dropdown-item">Items</router-link></li>
               <li><hr class="dropdown-divider"></li>
-              <li><router-link :to="{name: 'user'}" class="dropdown-item">Profile</router-link></li>
+              <li><router-link :to="{ name: 'user' }" class="dropdown-item">Profile</router-link></li>
               <li><hr class="dropdown-divider"></li>
               <li><button @click="logout" class="dropdown-item btn btn-danger">Logout</button></li>
-
             </ul>
           </li>
+
           <template v-else>
             <li class="nav-item">
-              <router-link :to="{name: 'login'}" class="nav-link" aria-current="page" style="color: white;">Login</router-link>
+              <router-link :to="{ name: 'login' }" class="nav-link" aria-current="page" style="color: white;">Login</router-link>
             </li>
             <li class="nav-item">
-              <router-link :to="{name: 'register'}" class="nav-link" aria-current="page" style="color: white;">Register</router-link>
+              <router-link :to="{ name: 'register' }" class="nav-link" aria-current="page" style="color: white;">Register</router-link>
             </li>
           </template>
-          
+
         </ul>
       </div>
     </div>
   </nav>
-  </template>
-  
-  <script setup lang="ts">
-  import { useAuthStore } from '../stores/auth';
-  import { computed, ref, watchEffect } from 'vue';
-  import { useRouter } from 'vue-router';
-  
-  const authStore = useAuthStore()
-  
-  const router = useRouter()
-  
-  const user = computed(()=>{
-    return authStore.user
-  })
-  
-  const isAuthenticated = computed(()=>{
-    return authStore.isAuthenticated
-  })
-  const showContactUs = ref(false);
+</template>
 
-  function toggleContactUs() {
-    showContactUs.value = !showContactUs.value;
+<script setup lang="ts">
+import { useAuthStore } from '../stores/auth';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const user = computed(() => {
+  return authStore.user;
+});
+
+const isAuthenticated = computed(() => {
+  return authStore.isAuthenticated;
+});
+
+async function logout() {
+  await authStore.logout()
+    .then(res => {
+      router.replace({ name: 'home' });
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+}
+</script>
+
+<style>
+body {
+  background: black;
+}
+
+nav {
+  font-size: 1.2rem;
+}
+
+.navbar-brand img {
+  height: 50px;
+  flex-grow: 1;
+}
+
+.dropdown-menu {
+  font-size: 1.2rem;
+}
+
+.contact-us-dropdown {
+  display: none;
+  position: absolute;
+  background-color: white;
+  padding: 10px;
+  animation: dropdown-animation 0.3s ease-in-out;
+}
+
+.contact-us-dropdown table {
+  width: 100%;
+}
+
+.contact-us-dropdown table td {
+  padding: 5px;
+}
+
+@keyframes dropdown-animation {
+  0% {
+    transform: scaleY(0);
   }
-  
-  async function logout(){
-    await authStore.logout()
-      .then( res => {
-        router.replace({name: 'home'})
-      })
-      .catch(err => {
-        console.log(err.message)
-      })
+  100% {
+    transform: scaleY(1);
   }
-  
-
-  </script>
-  <style>
-
-    body {
-      background: black;
-    }
-    
-    nav {
-      font-size: 1.2rem;
-    }
-    
-    .navbar-brand img {
-      height: 50px;
-      flex-grow: 1;
-    }
-    
-    .dropdown-menu {
-      font-size: 1.2rem;
-    }
-    
-    .contact-us-dropdown {
-      display: none;
-      position: absolute;
-      background-color: white;
-      padding: 10px;
-      animation: dropdown-animation 0.3s ease-in-out;
-    }
-    
-    .contact-us-dropdown table {
-      width: 100%;
-    }
-    
-    .contact-us-dropdown table td {
-      padding: 5px;
-    }
-    
-    @keyframes dropdown-animation {
-      0% {
-        transform: scaleY(0);
-      }
-      100% {
-        transform: scaleY(1);
-      }
-    }
-
+}
 </style>
