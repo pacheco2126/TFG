@@ -17,7 +17,11 @@
             <router-link :to="{ name: 'about_us' }" class="nav-link" style="color: white;">About Us</router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="{ name: 'news' }" class="nav-link" style="color: white;">Sponsors</router-link>
+            <router-link :to="{ name: 'sponsors' }" class="nav-link" style="color: white;">Sponsors</router-link>
+          </li>
+
+          <li class="nav-item">
+              <router-link :to="{name: 'tienda'}" class="nav-link" style="color: white;">Tienda</router-link>
           </li>
         </ul>
         <ul class="navbar-nav mb-2 mb-lg-0">
@@ -29,7 +33,7 @@
             <ul class="dropdown-menu">
               <li><router-link :to="{ name: 'items' }" class="dropdown-item">Items</router-link></li>
               <li><hr class="dropdown-divider"></li>
-              <li><router-link :to="{ name: 'user' }" class="dropdown-item">Profile</router-link></li>
+              <li><router-link :to="{ name: 'user' }" class="dropdown-item">Perfil</router-link></li>
               <li><hr class="dropdown-divider"></li>
               <li><button @click="logout" class="dropdown-item btn btn-danger">Logout</button></li>
             </ul>
@@ -53,7 +57,6 @@
 <script setup lang="ts">
 import { useAuthStore } from '../stores/auth';
 import { computed } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
 

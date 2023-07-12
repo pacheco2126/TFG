@@ -15,7 +15,8 @@
         "eslint": "^8.40.0",
         "eslint-plugin-vue": "^9.12.0",
         "nodemon": "^2.0.21",
-        "opn": "^6.0.0"
+        "opn": "^6.0.0",
+        "paypal-rest-sdk": "^1.8.1"
     },
     "dependencies": {
         "bcrypt": "^5.1.0",

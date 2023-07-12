@@ -29,18 +29,16 @@
       </div>
     </transition>
   <div id="item">
-    <h1>Items here</h1>
+    <h1>Tus Objetos here</h1>
     <div class="container">
-      <RouterLink to="/register_item" class="btn btn-primary" style="position: relative;">Register Item</RouterLink>
-      <input type="text" v-model="searchTerm" placeholder="Search items...">
+      <RouterLink to="/register_item" class="btn btn-primary" style="position: relative;">Registrar Objeto</RouterLink>
+      <img src="../images/skate.png" alt="Tus logros">
       <Suspense>
         <template #default>
-          <div v-if="!isLoading" v-for="item in filteredItems" :key="item.id_item" class="card card-body mt-4" style="background-color: rgba(255, 255, 255, 0.554);">
+          <div v-for="item in filteredItems" :key="item.id_item" class="card card-body mt-4" style="background-color: rgba(255, 255, 255, 0.554);">
             <h5 class="card-title" style="color:rgb(71, 62, 73)">Item Id: {{ item.id_item }}</h5>
             <h6 class="card-subtitle mb-2" style="color:rgb(71, 62, 73)">Item Name: {{ item.item_name }}</h6>
             <h6 class="card-subtitle mb-2" style="color:rgb(71, 62, 73)">Assigned to: {{ item.Assigned_to }}</h6>
-            <router-link :to="`/edit_item/${item.id_item}`" class="btn btn-primary">Edit Items</router-link>
-            <button @click="deleteItem(item)" class="btn btn-danger">Delete Item</button>
           </div>
         </template>
 
@@ -96,14 +94,6 @@ watch(searchTerm, (newValue) => {
   }
 });
 
-async function deleteItem(item: ItemData) {
-  console.log("el item a borrar es", item.Assigned_to)
-  try {
-    await authStore.deleteItem(item);
-  } catch (error) {
-    console.error('Error deleting item:', error);
-  }
-}
 </script>
 
 <style>

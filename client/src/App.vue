@@ -1,6 +1,8 @@
-<script setup lang="ts">
+<script setup>
 import { RouterView } from 'vue-router'
 import NavBar from './components/NavBar.vue';
+import { useShopStore } from "./stores/shop.js";
+
 </script>
 
 <template>
@@ -8,11 +10,23 @@ import NavBar from './components/NavBar.vue';
     <NavBar />
     <RouterView/> 
     <footer class="footer">
-      © NetInentory 2023
+      © SkateGrowth 2023
     </footer> 
   </div>
 
 </template>
+
+<script>
+export default {
+  data() {
+    return { shop: useShopStore() }
+  },
+  mounted() {
+    this.shop.fetchItemData();
+  }
+};
+</script>
+
 <style>
 body{
   background: url('./images/background.png');

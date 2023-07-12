@@ -11,9 +11,9 @@
           <table class="contact-table">
             <thead>
               <tr style="color: white">
-                <th>Name</th>
+                <th>Nombre</th>
                 <th>Email</th>
-                <th>Phone</th>
+                <th>Telefono</th>
               </tr>
             </thead>
             <tbody>
@@ -37,13 +37,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-//import { useI18n } from 'vue-i18n';
 
 
 const showPopup = ref(false);
 const contactButton = ref<HTMLElement | null>(null);
 const popupStyle = ref({});
-//const { t } = useI18n();
 
 onMounted(() => {
   if (contactButton.value) {

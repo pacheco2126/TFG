@@ -22,6 +22,19 @@ const router = createRouter({
       name: 'sponsors',
       component: () => import('../views/Sponsors.vue'),
     },
+
+    {
+        path: '/tienda',
+        name: 'tienda',
+        component: () => import('../views/Tienda.vue'),
+    },
+
+    {
+      path: '/cart',
+      name: 'cart',
+      component: () => import('../views/auth/CartView.vue'),
+    },
+    
     {
       path: '/login',
       name: 'login',
@@ -60,14 +73,6 @@ const router = createRouter({
       meta:{requireAuth: true}
 
     },
-
-    {
-      path: '/edit_item/:id',
-      name: 'edit_item',
-      component: () => import('../views/auth/EditItemView.vue'),
-      meta:{requireAuth: true}
-    }
-
   ]
 })
 

@@ -7,6 +7,9 @@ const cookieParser = require('cookie-parser')
 const authenticationMiddleware = require('./middleware/authentication')
 const credentials = require('./middleware/credentials')
 const errorHandlerMiddleware = require('./middleware/error_handler')
+const path = require('path');
+var paypal = require('paypal-rest-sdk');
+var fs = require('fs');
 
 
 // Configurar la aplicación de Express
@@ -46,6 +49,36 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./rutas/api/auth'));
 
 
+var ITEMS_FILE = path.join(__dirname, 'items.json');
+let itemsData = null;
+
+app.use('/', express.static(__dirname));
+
+
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': 'AeCK8dvXa-Q5waY1rIWtO9gq3IYxgNoo_tBglJilu5GUsELlNU977bDt7L9BKPFBtv-sqD98Lk9JSYsm',
+  'client_secret': 'EFRjFyh4s5v6mLFZkBuJlPBeLB4FK-5kxn6VuZiLSJh-zc8G0VA54gQInY5X3Y8bzEKOU2zTSDUTt-uy'
+});
+
+
+// start payment process
+app.post('/checkout' , (req , res) => {
+  console.log(req.body);
+  var execute_payment_json = {
+    "payer_id": req.body.data.payerID,
+  };
+  const payment = {};
+  payment.amount = req.body.data.amount;
+  const paymentID = req.body.data.paymentID;
+  paymentPaypal(paymentID, execute_payment_json, payment,(err, result) => {
+      if(err) {
+        res.statuts(400).json(JSON.stringify(err));
+      } else {
+        res.status(200).json(payment);
+      }
+  });
+});
 
 //default error handler
 app.use(errorHandlerMiddleware)
@@ -57,3 +90,44 @@ app.listen(PORT, () => {
   console.log(`Servidor en ejecución en el puerto ${PORT}`);
 });
 
+// helper functions
+var paymentPaypal = (paymentID, execute_payment_json, payment, cb) => {
+  paypal.payment.execute(paymentID, execute_payment_json,(error, paymentLog) => {
+      if (error)
+      {
+          return cb(error);
+      }
+      else
+      {
+          // the server logic after successful payment
+          // here just print out the payment information to the console
+          payment.email = paymentLog.payer.payer_info.email;
+          payment.first_name = paymentLog.payer.payer_info.first_name;
+          payment.last_name = paymentLog.payer.payer_info.last_name;
+          console.log(payment);
+          cb(null, JSON.stringify(payment));
+     }
+  });
+}
+
+app.get('/api/items', function(req, res) {
+  fs.readFile(ITEMS_FILE, function(err, data) {
+      if (err) {
+          console.error(err);
+          process.exit(1);
+      }
+      itemsData = JSON.parse(data);
+      res.json(itemsData);
+  });
+});
+
+app.get('/api/item/:id', function(req, res) {
+
+  const item = itemsData.find(item => item.id === req.params.id);
+      if (item) {
+          res.json(item);
+      } else {
+          res.status(404).json({ error: 'Item not found' });
+      }
+
+});
