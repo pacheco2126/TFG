@@ -36,7 +36,6 @@ app.use(authenticationMiddleware)
 
 // Conectar a la base de datos de MongoDB
 // to hide warnings we use that additional fields
-mongoose.connect('mongodb+srv://joaquimpacheco:Andorra3000@clustertfg.0buwu8b.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Conexión exitosa a la base de datos'))
   .catch(err => console.error('Error al conectar a la base de datos', err));
 
@@ -55,11 +54,6 @@ let itemsData = null;
 app.use('/', express.static(__dirname));
 
 
-paypal.configure({
-  'mode': 'sandbox', //sandbox or live
-  'client_id': 'AeCK8dvXa-Q5waY1rIWtO9gq3IYxgNoo_tBglJilu5GUsELlNU977bDt7L9BKPFBtv-sqD98Lk9JSYsm',
-  'client_secret': 'EFRjFyh4s5v6mLFZkBuJlPBeLB4FK-5kxn6VuZiLSJh-zc8G0VA54gQInY5X3Y8bzEKOU2zTSDUTt-uy'
-});
 
 
 // start payment process
