@@ -7,9 +7,9 @@
         <table class="contact-table">
           <thead>
             <tr style="color: white">
-              <th>Name</th>
+              <th>Nombre</th>
               <th>Email</th>
-              <th>Phone</th>
+              <th>Telefono</th>
             </tr>
           </thead>
           <tbody>
@@ -31,31 +31,31 @@
     <div id="register">
       <div class="container" style="background-color: transparent;">
         <div class="card card-body mt-4">
-          <h5 class="card-title" style="color: rgb(242, 242, 242);">Register</h5>
+          <h5 class="card-title" style="color: rgb(242, 242, 242);">Registrar</h5>
           <form @submit.prevent="submit">
             <p v-if="errorMessage" class="error-message text-danger mb-4">{{ errorMessage }}</p>
             <div class="mb-3">
-              <label for="username" class="form-label" style="color: white;">Username</label>
+              <label for="username" class="form-label" style="color: white;">Nombre</label>
               <input v-model="registerData.username" type="text" class="form-control" id="username" autocomplete="off">
             </div>
             <div class="mb-3">
-              <label for="first_name" class="form-label" style="color: white;">First Name</label>
+              <label for="first_name" class="form-label" style="color: white;">Primer Apellido</label>
               <input v-model="registerData.first_name" type="text" class="form-control" id="first_name" autocomplete="off">
             </div>
             <div class="mb-3">
-              <label for="last_name" class="form-label" style="color: white;">Last Name</label>
+              <label for="last_name" class="form-label" style="color: white;">Segundo Apellido</label>
               <input v-model="registerData.last_name" type="text" class="form-control" id="last_name" autocomplete="off">
             </div>
             <div class="mb-3">
-              <label for="email" class="form-label" style="color: white;">Email address</label>
+              <label for="email" class="form-label" style="color: white;">Email</label>
               <input v-model="registerData.email" type="email" class="form-control" id="email" autocomplete="off">
             </div>
             <div class="mb-3">
-              <label for="password" class="form-label" style="color: white;">Password</label>
+              <label for="password" class="form-label" style="color: white;">Contraseña</label>
               <input v-model="registerData.password" type="password" class="form-control" id="password">
             </div>
             <div class="mb-3">
-              <label for="password_confirm" class="form-label" style="color: white;">Confirm Password</label>
+              <label for="password_confirm" class="form-label" style="color: white;">Confirma contraseña</label>
               <input v-model="registerData.password_confirm" type="password" class="form-control" id="password_confirm">
             </div>
             <button type="submit" class="btn btn-success">Register</button>

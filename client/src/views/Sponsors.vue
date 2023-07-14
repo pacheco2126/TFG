@@ -43,7 +43,6 @@ const showPopup = ref(false);
 const contactButton = ref<HTMLElement | null>(null);
 const popupStyle = ref({});
 
-onMounted(fetchNews);
 
 onMounted(() => {
   if (contactButton.value) {
@@ -57,16 +56,6 @@ onMounted(() => {
   }
 });
 
-async function fetchNews() {
-  try {
-    const response = await fetch("https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=1125c5670e3a4afdb3805933240dee63");
-    const data = await response.json();
-    articles.value = data.articles;
-    articles.value = articles.value.slice(0, 5);
-} catch (error) {
-    console.log(error);
-  }
-}
 </script>
 <style>
 li img {

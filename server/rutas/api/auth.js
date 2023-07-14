@@ -6,6 +6,8 @@ const authMiddleware = require('../../middleware/authentication')
 
 router.post('/register', authControllers.register)
 
+router.post('/register_arquitect', authControllers.register_arquitect)
+
 router.post('/register_item', authControllers.register_item)
 
 router.post('/edit_item', authControllers.edit_item)

@@ -9,11 +9,11 @@ console.log(shop.items);
 <template>
     <div class="input-group ps-3">
         <div id="navbar-search-autocomplete" class="form-outline">
-          <input type="text" name="search" v-model="shop.itemSearch" class="form-control" placeholder="Buscar criptomoneda" v-on:keyup="shop.searchItems()" />
+          <input type="text" name="search" v-model="shop.itemSearch" class="form-control" placeholder="Buscar tu modelo..." v-on:keyup="shop.searchItems()" />
         </div>
       </div>
   
-      <RouterLink class="d-flex gap-1 text-decoration-none text-black ps-3" to="/c">
+      <RouterLink class="d-flex gap-1 text-decoration-none text-black ps-3" to="/cart">
         <i class="bi bi-cart3"></i>
         <span class="text-black">{{ shop.cartQuantity }}</span>
       </RouterLink>

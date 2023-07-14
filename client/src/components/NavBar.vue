@@ -19,6 +19,9 @@
           <li class="nav-item">
             <router-link :to="{ name: 'sponsors' }" class="nav-link" style="color: white;">Sponsors</router-link>
           </li>
+          <li class="nav-item">
+            <router-link :to="{ name: 'arquitectos' }" class="nav-link" style="color: white;">Arquitectos</router-link>
+          </li>
 
           <li class="nav-item">
               <router-link :to="{name: 'tienda'}" class="nav-link" style="color: white;">Tienda</router-link>
@@ -31,7 +34,7 @@
               {{ user.username }}
             </a>
             <ul class="dropdown-menu">
-              <li><router-link :to="{ name: 'items' }" class="dropdown-item">Items</router-link></li>
+              <li><router-link :to="{ name: 'items' }" class="dropdown-item">Tus Objetos</router-link></li>
               <li><hr class="dropdown-divider"></li>
               <li><router-link :to="{ name: 'user' }" class="dropdown-item">Perfil</router-link></li>
               <li><hr class="dropdown-divider"></li>

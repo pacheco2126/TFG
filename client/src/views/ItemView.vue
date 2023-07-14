@@ -28,26 +28,30 @@
         </div>
       </div>
     </transition>
-  <div id="item">
-    <h1>Tus Objetos here</h1>
-    <div class="container">
-      <RouterLink to="/register_item" class="btn btn-primary" style="position: relative;">Registrar Objeto</RouterLink>
-      <img src="../images/skate.png" alt="Tus logros">
-      <Suspense>
-        <template #default>
-          <div v-for="item in filteredItems" :key="item.id_item" class="card card-body mt-4" style="background-color: rgba(255, 255, 255, 0.554);">
-            <h5 class="card-title" style="color:rgb(71, 62, 73)">Item Id: {{ item.id_item }}</h5>
-            <h6 class="card-subtitle mb-2" style="color:rgb(71, 62, 73)">Item Name: {{ item.item_name }}</h6>
-            <h6 class="card-subtitle mb-2" style="color:rgb(71, 62, 73)">Assigned to: {{ item.Assigned_to }}</h6>
-          </div>
-        </template>
-
-        <template #fallback>
-          <p>Loading...</p>
-        </template>
-      </Suspense>
+    <div id="item"> 
+      <h1>Tus Objetos</h1>
+      <div class="container">
+        <div class="items-container">
+          <RouterLink to="/register_item" class="btn btn-primary" style="position: relative;">Registrar Objeto</RouterLink>
+          <Suspense>
+            <template #default>
+              <div v-for="item in filteredItems" :key="item.id_item" class="card card-body mt-4" style="background-color: rgba(255, 255, 255, 0.554);">
+                <h5 class="card-title" style="color:rgb(71, 62, 73)">Item Id: {{ item.id_item }}</h5>
+                <h6 class="card-subtitle mb-2" style="color:rgb(71, 62, 73)">Item Name: {{ item.item_name }}</h6>
+                <h6 class="card-subtitle mb-2" style="color:rgb(71, 62, 73)">Assigned to: {{ item.Assigned_to }}</h6>
+              </div>
+            </template>
+    
+            <template #fallback>
+              <p>Loading...</p>
+            </template>
+          </Suspense>
+        </div>
+        <div class="image-container">
+          <img src="../images/skate.png" alt="Tus logros">
+        </div>
+      </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -98,7 +102,23 @@ watch(searchTerm, (newValue) => {
 
 <style>
 
+.container {
+  display: flex;
+}
 
+.items-container {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.image-container {
+  flex: 1;
+}
+
+.image-container img {
+  max-width: 100%;
+  height: auto;
+}
 #item h1 {
   text-align: center;
 }

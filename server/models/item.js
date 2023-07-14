@@ -17,7 +17,7 @@ const ItemSchema = Schema(
     required: true,
   },
 
-  Assigned_to: {
+  Usage: {
     type: String,
     required:true
   },

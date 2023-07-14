@@ -1,6 +1,7 @@
 require('dotenv').config(); // Cargar variables de entorno desde .env
 const User = require('../models/user')
 const Item = require('../models/item')
+const Arquitect = require('../models/arquitect')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
@@ -34,23 +35,40 @@ async function register(req, res){
   }
 }
 
+async function register_arquitect(req, res){
+  //obtengo datos de usuario de la HTTP
+  const {username, first_name, email, CV, projects} = req.body
+
+  //miramos que el correo no exista ya
+
+  const arquitectExists = await Arquitect.exists({email}).exec()  
+
+  if(arquitectExists) return res.sendStatus(409)
+
+    //creamos user en base de datos
+    try{ 
+      await Arquitect.create({username, first_name, email, CV, projects})
+      return res.sendStatus(201)}
+    catch (error) {
+      return res.status(400).json({message: "Could not register"})
+    }
+   
+} 
+
+
+
 async function register_item(req, res){
   //obtengo datos de item de la HTTP
-  const {id_item, item_name, Assigned_to} = req.body
+  const {id_item, item_name, Usage} = req.body
 
   //comprobamos que existan
-  if(!id_item || !item_name || !Assigned_to) {
+  if(!id_item || !item_name || !Usage) {
     return res.status(422).json({'message': 'Invalid item fields'})
   }
 
-  //miramos que el item no exista ya
-  const itemExists = await Item.exists({id_item}).exec()
-  
-  if(itemExists) return res.sendStatus(409).json({message: "The item already exist"})
-
   try {
     //creamos user en base de datos
-    await Item.create({id_item, item_name, Assigned_to})
+    await Item.create({id_item, item_name, Usage})
 
     return res.sendStatus(201)
   } catch (error) {
@@ -60,12 +78,12 @@ async function register_item(req, res){
 
 async function edit_item(req, res){
   //obtengo datos de item de la HTTP
-  const {id_item, item_name, Assigned_to} = req.body
+  const {id_item, item_name, Usage} = req.body
 
 
   //aqui es el error mirar si esto esta bien, quizas solo sea tema de que ese no es el error.
   //comprobamos que existan
-  if(!id_item || !item_name || !Assigned_to) {
+  if(!id_item || !item_name || !Usage) {
     return res.status(422).json({'message': 'Invalid item fields'})
   }
 
@@ -75,7 +93,7 @@ async function edit_item(req, res){
 
   // actualizamos los datos del ítem
   item.item_name = item_name
-  item.Assigned_to = Assigned_to
+  item.Assigned_to = Usage
 
   try {
     // guardamos los cambios en la base de datos
@@ -208,4 +226,4 @@ async function itemById(req, res){
 }
 
 
-module.exports = {register, register_item, edit_item, delete_item,login, logout, refresh, user, item, itemById}
+module.exports = {register, register_item,  register_arquitect ,edit_item, delete_item,login, logout, refresh, user, item, itemById}

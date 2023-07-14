@@ -35,20 +35,40 @@
           <form @submit.prevent="submit">
             <p v-if="errorMessage" class="error-message text-danger mb-4">{{ errorMessage }}</p>
             <div class="mb-3">
-              <label for="id_item" class="form-label" style="color: white;">Nombre/modelo</label>
-              <input v-model="RegisterDataItem.id_item" type="text" class="form-control" id="id_item" autocomplete="off">
+              <label for="id_item" class="form-label" style="color: white;">Objeto</label>
+              <select v-model="RegisterDataItem.id_item" class="form-control" id="id_item">
+                <option value="Tabla">Tabla</option>
+                <option value="Ejes">Ejes</option>
+                <option value="Ruedas">Ruedas</option>
+              </select>
             </div>
             <div class="mb-3">
               <label for="item_name" class="form-label" style="color: white;">Marca</label>
-              <input v-model="RegisterDataItem.item_name" type="text" class="form-control" id="item_name" autocomplete="off">
+              <select v-model="RegisterDataItem.item_name" class="form-control" id="item_name" v-if="RegisterDataItem.id_item === 'Tabla'">
+                <option value="Jart">Jart</option>
+                <option value="Baker">Baker</option>
+                <option value="Element">Element</option>
+              </select>
+              <select v-model="RegisterDataItem.item_name" class="form-control" id="item_name" v-if="RegisterDataItem.id_item === 'Ejes'">
+                <option value="Thunder">Thunder</option>
+                <option value="Venture">Venture</option>
+              </select>
+              <select v-model="RegisterDataItem.item_name" class="form-control" id="item_name" v-if="RegisterDataItem.id_item === 'Ruedas'">
+                <option value="Element">Element</option>
+                <option value="Spitfire">Spitfire</option>
+              </select>
             </div>
             <div class="mb-3">
-              <label for="item_name" class="form-label" style="color: white;">Nivel de uso</label>
-              <input v-model="RegisterDataItem.item_name" type="text" class="form-control" id="item_name" autocomplete="off">
-            </div>
+              <label for="Usage" class="form-label" style="color: white;">Uso</label>
+              <select v-model="RegisterDataItem.Usage" class="form-control" id="id_item">
+                <option value="Nuevo">Nuevo</option>
+                <option value="SemiNuevo">Semi Nuevo</option>
+                <option value="PocoUsado">Poco Usado</option>
+                <option value="Usado">Usado</option>
+              </select>           
+             </div>
             <button type="submit" class="btn btn-success">Registrar</button>
             <router-link to="/items" class="btn btn-primary" style="margin-left: 30rem;"> Volver a mis objetos</router-link>
-
           </form>
         </div>
       </div>
@@ -66,7 +86,7 @@
   const RegisterDataItem = reactive<RegisterDataItem>({
     id_item: "",
     item_name: "",
-    Assigned_to: "",
+    Usage: "",
 
   })
   
@@ -89,6 +109,7 @@
   });
 
   async function submit(){
+    console.log(RegisterDataItem)
     await authStore.register_item(RegisterDataItem)
       .then(res => {
         router.replace({name: "items"})

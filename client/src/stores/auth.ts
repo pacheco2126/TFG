@@ -13,7 +13,7 @@ export interface User{
 export interface Item{
   id_item: string,
   item_name: string,
-  Assigned_to: string, //name or in_Store
+  Usage: string, //name or in_Store
 }
 
 export interface ItemQuery {
@@ -35,7 +35,7 @@ export interface LoginData {
 export interface ItemData {
   id_item: string,
   item_name: string,
-  Assigned_to: string,
+  Usage: string,
 }
 
 export interface RegisterData {
@@ -47,15 +47,23 @@ export interface RegisterData {
   password_confirm: string,
 }
 
+export interface RegisterArquitect{
+  username: string,
+  first_name: string,  
+  email: string,
+  CV: File | null,
+  projects: String,
+}
+
 export interface RegisterDataItem {
   id_item: string,
   item_name: string,
-  Assigned_to: string,
+  Usage: string,
 }
 export interface EditDataItem {
   id_item: string,
   item_name: string,
-  Assigned_to: string,
+  Usage: string,
 }
 
 // 3 objects 
@@ -114,6 +122,16 @@ actions:{
       }
     },
 
+    async register_arquitect(payload: RegisterArquitect){
+      try {
+        const {data} = await useApi().post(`/api/auth/register_arquitect`, payload); //solicitudes privadas
+        return data
+      } catch (error: Error | any) {
+        throw error.message 
+      }
+    },
+  
+
     async register_item(payload: RegisterDataItem){
       try {
         const {data} = await useApiPrivate().post(`/api/auth/register_item`, payload); //solicitudes privadas
@@ -139,7 +157,7 @@ actions:{
         return;
       }
       try {
-        console.log("Este es el item que se borra", payload.Assigned_to)
+        console.log("Este es el item que se borra", payload.Usage)
         const { data } = await useApiPrivate().post(`/api/auth/delete_item`, payload);
         return data;
       } catch (error: Error | any) {
