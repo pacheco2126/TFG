@@ -57,7 +57,6 @@
 
 
     const loader = new Loader({
-    apiKey: "AIzaSyCR1MW2QJEBm9kBIQBqFTDFDNBfPLoFnUw",
     version: "weekly",
     libraries: ["places"],
 });
